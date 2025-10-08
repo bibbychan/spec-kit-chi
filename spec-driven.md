@@ -1,106 +1,106 @@
 # Specification-Driven Development (SDD)
 
-## The Power Inversion
+## 權力反轉
 
-For decades, code has been king. Specifications served code—they were the scaffolding we built and then discarded once the "real work" of coding began. We wrote PRDs to guide development, created design docs to inform implementation, drew diagrams to visualize architecture. But these were always subordinate to the code itself. Code was truth. Everything else was, at best, good intentions. Code was the source of truth, and as it moved forward, specs rarely kept pace. As the asset (code) and the implementation are one, it's not easy to have a parallel implementation without trying to build from the code.
+數十年來，程式碼一直是王道。規格服務於程式碼——它們是我們建構的鷹架，一旦程式設計的「真正工作」開始就被拋棄。我們撰寫 PRD 來指導開發，建立設計文件來告知實作，繪製圖表來視覺化架構。但這些都從屬於程式碼本身。程式碼是真理。其他一切都是，充其量，良好的意圖。程式碼是真相的來源，隨著它的前進，規格很少能跟上進度。由於資產（程式碼）和實作是一體的，如果不嘗試從程式碼建構，就很难有平行實作。
 
-Spec-Driven Development (SDD) inverts this power structure. Specifications don't serve code—code serves specifications. The Product Requirements Document (PRD) isn't a guide for implementation; it's the source that generates implementation. Technical plans aren't documents that inform coding; they're precise definitions that produce code. This isn't an incremental improvement to how we build software. It's a fundamental rethinking of what drives development.
+Spec-Driven Development (SDD) 顛覆了這種權力結構。規格不服務於程式碼——程式碼服務於規格。產品需求文件（PRD）不是實作的指南；它是產生實作的來源。技術計畫不是告知編碼的文件；它們是產生程式碼的精確定義。這不是對我們建構軟體方式的漸進式改進。這是對驅動開發的根本性重新思考。
 
-The gap between specification and implementation has plagued software development since its inception. We've tried to bridge it with better documentation, more detailed requirements, stricter processes. These approaches fail because they accept the gap as inevitable. They try to narrow it but never eliminate it. SDD eliminates the gap by making specifications and their concrete implementation plans born from the specification executable. When specifications and implementation plans generate code, there is no gap—only transformation.
+規格和實作之間的差距自軟體開發誕生以來就一直困擾著它。我們試圖用更好的文件、更詳細的需求、更嚴格的流程來彌補這個差距。這些方法失敗了，因為它們接受這個差距是不可避免的。它們試圖縮小它，但從未消除它。SDD 通過使規格和從規格產生的具體實作計畫可執行來消除差距。當規格和實作計畫生成程式碼時，沒有差距——只有轉換。
 
-This transformation is now possible because AI can understand and implement complex specifications, and create detailed implementation plans. But raw AI generation without structure produces chaos. SDD provides that structure through specifications and subsequent implementation plans that are precise, complete, and unambiguous enough to generate working systems. The specification becomes the primary artifact. Code becomes its expression (as an implementation from the implementation plan) in a particular language and framework.
+這種轉換現在是可能的，因為 AI 可以理解和實作複雜的規格，並建立詳細的實作計畫。但沒有結構的原始 AI 生成會產生混亂。SDD 通過規格和後續的實作計畫提供這種結構，這些計畫足夠精確、完整和明確，可以生成運作的系統。規格成為主要的工件。程式碼成為其在特定語言和框架中的表達（作為從實作計畫的實作）。
 
-In this new world, maintaining software means evolving specifications. The intent of the development team is expressed in natural language ("**intent-driven development**"), design assets, core principles and other guidelines. The **lingua franca** of development moves to a higher level, and code is the last-mile approach.
+在這個新世界中，維護軟體意味著進化規格。開發團隊的意圖以自然語言（「**意圖驅動開發**」）、設計資產、核心原則和其他指導方針表達。開發的 **通用語** 移動到更高層次，而程式碼是最後一哩的方法。
 
-Debugging means fixing specifications and their implementation plans that generate incorrect code. Refactoring means restructuring for clarity. The entire development workflow reorganizes around specifications as the central source of truth, with implementation plans and code as the continuously regenerated output. Updating apps with new features or creating a new parallel implementation because we are creative beings, means revisiting the specification and creating new implementation plans. This process is therefore a 0 -> 1, (1', ..), 2, 3, N.
+除錯意味著修復產生錯誤程式碼的規格和其實作計畫。重構意味為清晰度而重組結構。整個開發工作流程圍繞規格作為中心真相來源重新組織，實作計畫和程式碼作為持續重新生成的輸出。用新功能更新應用程式或因為我們是有創造力的生物而建立新的平行實作，意味著重新審視規格並建立新的實作計畫。因此，這個過程是 0 -> 1, (1', ..), 2, 3, N。
 
-The development team focuses in on their creativity, experimentation, their critical thinking.
+開發團隊專注於他們的創造力、實驗和他們的批判性思維。
 
-## The SDD Workflow in Practice
+## 實踐中的 SDD 工作流程
 
-The workflow begins with an idea—often vague and incomplete. Through iterative dialogue with AI, this idea becomes a comprehensive PRD. The AI asks clarifying questions, identifies edge cases, and helps define precise acceptance criteria. What might take days of meetings and documentation in traditional development happens in hours of focused specification work. This transforms the traditional SDLC—requirements and design become continuous activities rather than discrete phases. This is supportive of a **team process**, where team-reviewed specifications are expressed and versioned, created in branches, and merged.
+工作流程始於一個想法——通常是模糊和不完整的。通過與 AI 的迭代對話，這個想法變成全面的 PRD。AI 提出澄清問題，識別邊緣情況，並協助定義精確的驗收標準。在傳統開發中可能需要幾天會議和文件的工作，在幾小時的專注規格工作中完成。這改變了傳統的 SDLC——需求和設計變成持續的活動，而不是離散的階段。這支援 **團隊流程**，其中團隊審查的規格被表達和版本控制，在分支中建立並合併。
 
-When a product manager updates acceptance criteria, implementation plans automatically flag affected technical decisions. When an architect discovers a better pattern, the PRD updates to reflect new possibilities.
+當產品經理更新驗收標準時，實作計畫會自動標記受影響的技術決策。當架構師發現更好的模式時，PRD 會更新以反映新的可能性。
 
-Throughout this specification process, research agents gather critical context. They investigate library compatibility, performance benchmarks, and security implications. Organizational constraints are discovered and applied automatically—your company's database standards, authentication requirements, and deployment policies seamlessly integrate into every specification.
+在整個規格過程中，研究代理收集關鍵上下文。他們調查函式庫相容性、效能基準和安全影響。組織限制被發現並自動應用——您公司的資料庫標準、身分驗證要求和部署政策無縫整合到每個規格中。
 
-From the PRD, AI generates implementation plans that map requirements to technical decisions. Every technology choice has documented rationale. Every architectural decision traces back to specific requirements. Throughout this process, consistency validation continuously improves quality. AI analyzes specifications for ambiguity, contradictions, and gaps—not as a one-time gate, but as an ongoing refinement.
+從 PRD，AI 生成將需求映射到技術決策的實作計畫。每個技術選擇都有記錄的基本原理。每個架構決策都追溯到特定的需求。在整個過程中，一致性驗證持續改進品質。AI 分析規格的模糊性、矛盾和差距——不是作為一次性閘門，而是作為持續的精煉。
 
-Code generation begins as soon as specifications and their implementation plans are stable enough, but they do not have to be "complete." Early generations might be exploratory—testing whether the specification makes sense in practice. Domain concepts become data models. User stories become API endpoints. Acceptance scenarios become tests. This merges development and testing through specification—test scenarios aren't written after code, they're part of the specification that generates both implementation and tests.
+程式碼生成在規格和其實作計畫足夠穩定時開始，但它們不必是「完整的」。早期生成可能是探索性的——測試規格在實踐中是否有意義。領域概念變成資料模型。使用者故事變成 API 端點。驗收場景變成測試。這通過規格合併開發和測試——測試場景不是在程式碼之後撰寫的，它們是產生實作和測試的規格的一部分。
 
-The feedback loop extends beyond initial development. Production metrics and incidents don't just trigger hotfixes—they update specifications for the next regeneration. Performance bottlenecks become new non-functional requirements. Security vulnerabilities become constraints that affect all future generations. This iterative dance between specification, implementation, and operational reality is where true understanding emerges and where the traditional SDLC transforms into a continuous evolution.
+反饋迴圈延伸到初始開發之外。生產指標和事件不僅觸發熱修復——它們更新下次重新生成的規格。效能瓶頸變成新的非功能性需求。安全漏洞變成影響所有未來生成的限制。規格、實作和運作現實之間的這種迭代舞蹈是真正理解出現的地方，也是傳統 SDLC 轉變為持續進化的地方。
 
-## Why SDD Matters Now
+## 為什麼 SDD 現在很重要
 
-Three trends make SDD not just possible but necessary:
+三個趨勢使 SDD 不僅可能而且必要：
 
-First, AI capabilities have reached a threshold where natural language specifications can reliably generate working code. This isn't about replacing developers—it's about amplifying their effectiveness by automating the mechanical translation from specification to implementation. It can amplify exploration and creativity, support "start-over" easily, and support addition, subtraction, and critical thinking.
+首先，AI 能力已經達到一個閾值，自然語言規格可以可靠地生成運作的程式碼。這不是關於替換開發人員——而是通過自動化從規格到實作的機械翻譯來放大他們的有效性。它可以放大探索和創造力，輕鬆支援「重新開始」，並支援加法、減法和批判性思維。
 
-Second, software complexity continues to grow exponentially. Modern systems integrate dozens of services, frameworks, and dependencies. Keeping all these pieces aligned with original intent through manual processes becomes increasingly difficult. SDD provides systematic alignment through specification-driven generation. Frameworks may evolve to provide AI-first support, not human-first support, or architect around reusable components.
+其次，軟體複雜性繼續呈指數級增長。現代系統整合了數十個服務、框架和依賴項。通過手動流程保持所有這些部分與原始意圖一致變得越來越困難。SDD 通過規格驅動的生成提供系統性的一致性。框架可能會演變以提供 AI 優先的支援，而不是人類優先的支援，或圍繞可重用元件進行架構設計。
 
-Third, the pace of change accelerates. Requirements change far more rapidly today than ever before. Pivoting is no longer exceptional—it's expected. Modern product development demands rapid iteration based on user feedback, market conditions, and competitive pressures. Traditional development treats these changes as disruptions. Each pivot requires manually propagating changes through documentation, design, and code. The result is either slow, careful updates that limit velocity, or fast, reckless changes that accumulate technical debt.
+第三，變化的步伐加速。需求現在比以往任何時候都變化得更快。轉向不再例外——這是預期的。現代產品開發需要基於使用者反饋、市場條件和競爭壓力的快速迭代。傳統開發將這些變化視為干擾。每次轉向都需要手動將變化傳播到文件、設計和程式碼中。結果要麼是限制速度的緩慢、謹慎的更新，要麼是累積技術債務的快速、魯莽的變化。
 
-SDD can support what-if/simulation experiments: "If we need to re-implement or change the application to promote a business need to sell more T-shirts, how would we implement and experiment for that?"
+SDD 可以支援假設/模擬實驗：「如果我們需要重新實作或更改應用程式以促進銷售更多 T 恤的業務需求，我們將如何實作和實驗？」
 
-SDD transforms requirement changes from obstacles into normal workflow. When specifications drive implementation, pivots become systematic regenerations rather than manual rewrites. Change a core requirement in the PRD, and affected implementation plans update automatically. Modify a user story, and corresponding API endpoints regenerate. This isn't just about initial development—it's about maintaining engineering velocity through inevitable changes.
+SDD 將需求變化從障礙轉變為正常工作流程。當規格驅動實作時，轉向變成系統性的重新生成，而不是手動重寫。更改 PRD 中的核心需求，受影響的實作計畫會自動更新。修改使用者故事，相應的 API 端點會重新生成。這不僅僅是關於初始開發——這是關於通過不可避免的變化保持工程速度。
 
-## Core Principles
+## 核心原則
 
-**Specifications as the Lingua Franca**: The specification becomes the primary artifact. Code becomes its expression in a particular language and framework. Maintaining software means evolving specifications.
+**規格作為通用語**：規格成為主要的工件。程式碼成為其在特定語言和框架中的表達。維護軟體意味著進化規格。
 
-**Executable Specifications**: Specifications must be precise, complete, and unambiguous enough to generate working systems. This eliminates the gap between intent and implementation.
+**可執行規格**：規格必須足夠精確、完整和明確，以生成運作的系統。這消除了意圖和實作之間的差距。
 
-**Continuous Refinement**: Consistency validation happens continuously, not as a one-time gate. AI analyzes specifications for ambiguity, contradictions, and gaps as an ongoing process.
+**持續精煉**：一致性驗證持續發生，而不是作為一次性閘門。AI 分析規格的模糊性、矛盾和差距作為持續的過程。
 
-**Research-Driven Context**: Research agents gather critical context throughout the specification process, investigating technical options, performance implications, and organizational constraints.
+**研究驅動的上下文**：研究代理在整個規格過程中收集關鍵上下文，調查技術選項、效能影響和組織限制。
 
-**Bidirectional Feedback**: Production reality informs specification evolution. Metrics, incidents, and operational learnings become inputs for specification refinement.
+**雙向反饋**：生產現實告知規格進化。指標、事件和運作學習成為規格精煉的輸入。
 
-**Branching for Exploration**: Generate multiple implementation approaches from the same specification to explore different optimization targets—performance, maintainability, user experience, cost.
+**探索分支**：從同一規格生成多種實作方法，以探索不同的優化目標——效能、可維護性、使用者體驗、成本。
 
-## Implementation Approaches
+## 實作方法
 
-Today, practicing SDD requires assembling existing tools and maintaining discipline throughout the process. The methodology can be practiced with:
+今天，實踐 SDD 需要組裝現有工具並在整個過程中保持紀律。這種方法論可以透過以下方式實踐：
 
-- AI assistants for iterative specification development
-- Research agents for gathering technical context
-- Code generation tools for translating specifications to implementation
-- Version control systems adapted for specification-first workflows
-- Consistency checking through AI analysis of specification documents
+- AI 助手用於迭代規格開發
+- 研究代理用於收集技術上下文
+- 程式碼生成工具用於將規格翻譯為實作
+- 適應規格優先工作流程的版本控制系統
+- 通過 AI 分析規格文件進行一致性檢查
 
-The key is treating specifications as the source of truth, with code as the generated output that serves the specification rather than the other way around.
+關鍵是將規格視為真相來源，程式碼作為生成的輸出服務於規格，而不是相反。
 
-## Streamlining SDD with Commands
+## 使用命令簡化 SDD
 
-The SDD methodology is significantly enhanced through three powerful commands that automate the specification → planning → tasking workflow:
+SDD 方法論通過三個強大的命令顯著增強，這些命令自動化規格 → 規劃 → 任務分配工作流程：
 
-### The `/speckit.specify` Command
+### `/speckit.specify` 命令
 
-This command transforms a simple feature description (the user-prompt) into a complete, structured specification with automatic repository management:
+此命令將簡單的功能描述（使用者提示）轉換為完整的結構化規格，並具有自動存儲庫管理：
 
-1. **Automatic Feature Numbering**: Scans existing specs to determine the next feature number (e.g., 001, 002, 003)
-2. **Branch Creation**: Generates a semantic branch name from your description and creates it automatically
-3. **Template-Based Generation**: Copies and customizes the feature specification template with your requirements
-4. **Directory Structure**: Creates the proper `specs/[branch-name]/` structure for all related documents
+1. **自動功能編號**：掃描現有規格以確定下一個功能編號（例如 001、002、003）
+2. **分支建立**：從您的描述生成語義分支名稱並自動建立它
+3. **基於範本的生成**：複製和自訂功能規格範本與您的需求
+4. **目錄結構**：為所有相關文件建立正確的 `specs/[branch-name]/` 結構
 
-### The `/speckit.plan` Command
+### `/speckit.plan` 命令
 
-Once a feature specification exists, this command creates a comprehensive implementation plan:
+一旦功能規格存在，此命令建立全面的實作計畫：
 
-1. **Specification Analysis**: Reads and understands the feature requirements, user stories, and acceptance criteria
-2. **Constitutional Compliance**: Ensures alignment with project constitution and architectural principles
-3. **Technical Translation**: Converts business requirements into technical architecture and implementation details
-4. **Detailed Documentation**: Generates supporting documents for data models, API contracts, and test scenarios
-5. **Quickstart Validation**: Produces a quickstart guide capturing key validation scenarios
+1. **規格分析**：閱讀和理解功能需求、使用者故事和驗收標準
+2. **憲法合規性**：確保與專案憲法和架構原則的一致性
+3. **技術翻譯**：將業務需求轉換為技術架構和實作細節
+4. **詳細文件**：為資料模型、API 合約和測試場景生成支援文件
+5. **快速入門驗證**：產生捕獲關鍵驗證場景的快速入門指南
 
-### The `/speckit.tasks` Command
+### `/speckit.tasks` 命令
 
-After a plan is created, this command analyzes the plan and related design documents to generate an executable task list:
+計畫建立後，此命令分析計畫和相關設計文件以生成可執行的任務清單：
 
-1. **Inputs**: Reads `plan.md` (required) and, if present, `data-model.md`, `contracts/`, and `research.md`
-2. **Task Derivation**: Converts contracts, entities, and scenarios into specific tasks
-3. **Parallelization**: Marks independent tasks `[P]` and outlines safe parallel groups
-4. **Output**: Writes `tasks.md` in the feature directory, ready for execution by a Task agent
+1. **輸入**：讀取 `plan.md`（必需）以及存在的 `data-model.md`、`contracts/` 和 `research.md`
+2. **任務推導**：將合約、實體和場景轉換為特定任務
+3. **平行化**：標記獨立任務 `[P]` 並概述安全的平行組
+4. **輸出**：在功能目錄中寫入 `tasks.md`，準備由任務代理執行
 
 ### Example: Building a Chat Feature
 

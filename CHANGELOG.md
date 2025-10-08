@@ -1,132 +1,132 @@
-# Changelog
+# 變更日誌
 
 <!-- markdownlint-disable MD024 -->
 
-All notable changes to the Specify CLI and templates are documented here.
+所有對 Specify CLI 和範本的重要變更都記錄在此。
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+格式基於 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)，
+並且此專案遵循 [Semantic Versioning](https://semver.org/spec/v2.0.0.html)。
 
 ## [0.0.18] - 2025-10-06
 
-### Added
+### 新增功能
 
-- Support for using `.` as a shorthand for current directory in `specify init .` command, equivalent to `--here` flag but more intuitive for users.
-- Use the `/speckit.` command prefix to easily discover Spec Kit-related commands.
-- Refactor the prompts and templates to simplify their capabilities and how they are tracked. No more polluting things with tests when they are not needed.
-- Ensure that tasks are created per user story (simplifies testing and validation).
-- Add support for Visual Studio Code prompt shortcuts and automatic script execution.
+- 支援在 `specify init .` 指令中使用 `.` 作為當前目錄的簡寫，相當於 `--here` 標誌但對使用者更直觀。
+- 使用 `/speckit.` 指令前綴來輕鬆發現 Spec Kit 相關指令。
+- 重構提示和範本以簡化其功能和追蹤方式。不再在不需要測試時污染檔案。
+- 確保根據使用者故事創建任務（簡化測試和驗證）。
+- 新增對 Visual Studio Code 提示快捷鍵和自動腳本執行的支援。
 
-### Changed
+### 變更
 
-- All command files now prefixed with `speckit.` (e.g., `speckit.specify.md`, `speckit.plan.md`) for better discoverability and differentiation in IDE/CLI command palettes and file explorers
+- 所有指令檔案現在前綴為 `speckit.`（例如 `speckit.specify.md`、`speckit.plan.md`）以便在 IDE/CLI 指令選擇器和檔案瀏覽器中更好地發現和區分
 
 ## [0.0.17] - 2025-09-22
 
-### Added
+### 新增功能
 
-- New `/clarify` command template to surface up to 5 targeted clarification questions for an existing spec and persist answers into a Clarifications section in the spec.
-- New `/analyze` command template providing a non-destructive cross-artifact discrepancy and alignment report (spec, clarifications, plan, tasks, constitution) inserted after `/tasks` and before `/implement`.
-	- Note: Constitution rules are explicitly treated as non-negotiable; any conflict is a CRITICAL finding requiring artifact remediation, not weakening of principles.
+- 新的 `/clarify` 指令範本，為現有規格提供最多 5 個針對性的澄清問題，並將答案保存到規格的 Clarifications 部分中。
+- 新的 `/analyze` 指令範本，提供非破壞性的跨工件差異和一致性報告（規格、澄清、計畫、任務、憲法），插入在 `/tasks` 之後和 `/implement` 之前。
+	- 注意：憲法規則被明確視為不可協商的；任何衝突都是 CRITICAL 發現，需要工件修復，而不是削弱原則。
 
 ## [0.0.16] - 2025-09-22
 
-### Added
+### 新增功能
 
-- `--force` flag for `init` command to bypass confirmation when using `--here` in a non-empty directory and proceed with merging/overwriting files.
+- `--force` 標誌用於 `init` 指令，在非空目錄中使用 `--here` 時繞過確認並繼續合併/覆蓋檔案。
 
 ## [0.0.15] - 2025-09-21
 
-### Added
+### 新增功能
 
-- Support for Roo Code.
+- 支援 Roo Code。
 
 ## [0.0.14] - 2025-09-21
 
-### Changed
+### 變更
 
-- Error messages are now shown consistently.
+- 錯誤訊息現在顯示一致。
 
 ## [0.0.13] - 2025-09-21
 
-### Added
+### 新增功能
 
-- Support for Kilo Code. Thank you [@shahrukhkhan489](https://github.com/shahrukhkhan489) with [#394](https://github.com/github/spec-kit/pull/394).
-- Support for Auggie CLI. Thank you [@hungthai1401](https://github.com/hungthai1401) with [#137](https://github.com/github/spec-kit/pull/137).
-- Agent folder security notice displayed after project provisioning completion, warning users that some agents may store credentials or auth tokens in their agent folders and recommending adding relevant folders to `.gitignore` to prevent accidental credential leakage.
+- 支援 Kilo Code。感謝 [@shahrukhkhan489](https://github.com/shahrukhkhan489) 在 [#394](https://github.com/github/spec-kit/pull/394) 中的貢獻。
+- 支援 Auggie CLI。感謝 [@hungthai1401](https://github.com/hungthai1401) 在 [#137](https://github.com/github/spec-kit/pull/137) 中的貢獻。
+- 在專案配置完成後顯示代理資料夾安全通知，警告使用者某些代理可能在其代理資料夾中儲存憑證或身份驗證令牌，並建議將相關資料夾新增到 `.gitignore` 以防止意外憑證洩漏。
 
-### Changed
+### 變更
 
-- Warning displayed to ensure that folks are aware that they might need to add their agent folder to `.gitignore`.
-- Cleaned up the `check` command output.
+- 顯示警告以確保人們意識到他們可能需要將其代理資料夾新增到 `.gitignore`。
+- 清理了 `check` 指令的輸出。
 
 ## [0.0.12] - 2025-09-21
 
-### Changed
+### 變更
 
-- Added additional context for OpenAI Codex users - they need to set an additional environment variable, as described in [#417](https://github.com/github/spec-kit/issues/417).
+- 為 OpenAI Codex 使用者新增了額外的上下文 - 他們需要設定一個額外的環境變數，如 [#417](https://github.com/github/spec-kit/issues/417) 中所述。
 
 ## [0.0.11] - 2025-09-20
 
-### Added
+### 新增功能
 
-- Codex CLI support (thank you [@honjo-hiroaki-gtt](https://github.com/honjo-hiroaki-gtt) for the contribution in [#14](https://github.com/github/spec-kit/pull/14))
-- Codex-aware context update tooling (Bash and PowerShell) so feature plans refresh `AGENTS.md` alongside existing assistants without manual edits.
+- Codex CLI 支援（感謝 [@honjo-hiroaki-gtt](https://github.com/honjo-hiroaki-gtt) 在 [#14](https://github.com/github/spec-kit/pull/14) 中的貢獻）
+- Codex 感知的上下文更新工具（Bash 和 PowerShell），讓功能計畫能夠與現有助手一起重新整理 `AGENTS.md` 而無需手動編輯。
 
 ## [0.0.10] - 2025-09-20
 
-### Fixed
+### 修復
 
-- Addressed [#378](https://github.com/github/spec-kit/issues/378) where a GitHub token may be attached to the request when it was empty.
+- 解決了 [#378](https://github.com/github/spec-kit/issues/378) 中 GitHub token 在為空時可能附加到請求的問題。
 
 ## [0.0.9] - 2025-09-19
 
-### Changed
+### 變更
 
-- Improved agent selector UI with cyan highlighting for agent keys and gray parentheses for full names
+- 改進了代理選擇器 UI，代理鍵使用青色高亮顯示，完整名稱使用灰色括號
 
 ## [0.0.8] - 2025-09-19
 
-### Added
+### 新增功能
 
-- Windsurf IDE support as additional AI assistant option (thank you [@raedkit](https://github.com/raedkit) for the work in [#151](https://github.com/github/spec-kit/pull/151))
-- GitHub token support for API requests to handle corporate environments and rate limiting (contributed by [@zryfish](https://github.com/@zryfish) in [#243](https://github.com/github/spec-kit/pull/243))
+- Windsurf IDE 支援作為額外的 AI 助手選項（感謝 [@raedkit](https://github.com/raedkit) 在 [#151](https://github.com/github/spec-kit/pull/151) 中的工作）
+- GitHub token 支援 API 請求以處理企業環境和速率限制（由 [@zryfish](https://github.com/@zryfish) 在 [#243](https://github.com/github/spec-kit/pull/243) 中貢獻）
 
-### Changed
+### 變更
 
-- Updated README with Windsurf examples and GitHub token usage
-- Enhanced release workflow to include Windsurf templates
+- 更新了 README，增加了 Windsurf 範例和 GitHub token 使用方式
+- 增強了發布工作流程以包含 Windsurf 範本
 
 ## [0.0.7] - 2025-09-18
 
-### Changed
+### 變更
 
-- Updated command instructions in the CLI.
-- Cleaned up the code to not render agent-specific information when it's generic.
+- 更新了 CLI 中的指令說明。
+- 清理了程式碼，使其在通用情況下不渲染代理特定資訊。
 
 
 ## [0.0.6] - 2025-09-17
 
-### Added
+### 新增功能
 
-- opencode support as additional AI assistant option
+- opencode 支援作為額外的 AI 助手選項
 
 ## [0.0.5] - 2025-09-17
 
-### Added
+### 新增功能
 
-- Qwen Code support as additional AI assistant option
+- Qwen Code 支援作為額外的 AI 助手選項
 
 ## [0.0.4] - 2025-09-14
 
-### Added
+### 新增功能
 
-- SOCKS proxy support for corporate environments via `httpx[socks]` dependency
+- 透過 `httpx[socks]` 依賴項為企業環境新增 SOCKS proxy 支援
 
-### Fixed
+### 修復
 
-N/A
+無
 
-### Changed
+### 變更
 
-N/A
+無

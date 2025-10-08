@@ -1,122 +1,121 @@
-# Quick Start Guide
+# 快速入門指南
 
-This guide will help you get started with Spec-Driven Development using Spec Kit.
+本指南將協助您開始使用 Spec Kit 進行 Spec-Driven Development。
 
-> NEW: All automation scripts now provide both Bash (`.sh`) and PowerShell (`.ps1`) variants. The `specify` CLI auto-selects based on OS unless you pass `--script sh|ps`.
+> 新功能：所有自動化腳本現在都提供 Bash（`.sh`）和 PowerShell（`.ps1`）兩種版本。`specify` CLI 會根據作業系統自動選擇，除非您傳遞 `--script sh|ps` 參數。
 
-## The 4-Step Process
+## 4 步驟過程
 
-### 1. Install Specify
+### 1. 安裝 Specify
 
-Initialize your project depending on the coding agent you're using:
+根據您使用的程式碼代理初始化您的專案：
 
 ```bash
 uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME>
 ```
 
-Pick script type explicitly (optional):
+明確選擇腳本類型（可選）：
 ```bash
-uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME> --script ps  # Force PowerShell
-uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME> --script sh  # Force POSIX shell
+uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME> --script ps  # 強制使用 PowerShell
+uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME> --script sh  # 強制使用 POSIX shell
 ```
 
-### 2. Create the Spec
+### 2. 建立規格
 
-Use the `/speckit.specify` command to describe what you want to build. Focus on the **what** and **why**, not the tech stack.
-
-```bash
-/speckit.specify Build an application that can help me organize my photos in separate photo albums. Albums are grouped by date and can be re-organized by dragging and dropping on the main page. Albums are never in other nested albums. Within each album, photos are previewed in a tile-like interface.
-```
-
-### 3. Create a Technical Implementation Plan
-
-Use the `/speckit.plan` command to provide your tech stack and architecture choices.
+使用 `/speckit.specify` 命令來描述您想要建立的內容。專注於「做什麼」和「為什麼」，而不是技術堆疊。
 
 ```bash
-/speckit.plan The application uses Vite with minimal number of libraries. Use vanilla HTML, CSS, and JavaScript as much as possible. Images are not uploaded anywhere and metadata is stored in a local SQLite database.
+/speckit.specify 建立一個能協助我將照片整理到不同相簿的應用程式。相簿按日期分組，可以在主頁面上透過拖放重新組織。相簿不會在其他巢狀相簿中。在每個相簿中，照片以磚塊式介面預覽。
 ```
 
-### 4. Break Down and Implement
+### 3. 建立技術實作計畫
 
-Use `/speckit.tasks` to create an actionable task list, then ask your agent to implement the feature.
+使用 `/speckit.plan` 命令來提供您的技術堆疊和架構選擇。
 
-## Detailed Example: Building Taskify
+```bash
+/speckit.plan 應用程式使用 Vite 和最少的函式庫。盡可能使用純 HTML、CSS 和 JavaScript。圖片不會上傳到任何地方，元資料儲存在本地的 SQLite 資料庫中。
+```
 
-Here's a complete example of building a team productivity platform:
+### 4. 分解並實作
 
-### Step 1: Define Requirements with `/speckit.specify`
+使用 `/speckit.tasks` 建立可執行的任務清單，然後要求您的代理實作該功能。
+
+## 詳細範例：建立 Taskify
+
+這是一個建立團隊生產力平台的完整範例：
+
+### 步驟 1：使用 `/speckit.specify` 定義需求
 
 ```text
-Develop Taskify, a team productivity platform. It should allow users to create projects, add team members,
-assign tasks, comment and move tasks between boards in Kanban style. In this initial phase for this feature,
-let's call it "Create Taskify," let's have multiple users but the users will be declared ahead of time, predefined.
-I want five users in two different categories, one product manager and four engineers. Let's create three
-different sample projects. Let's have the standard Kanban columns for the status of each task, such as "To Do,"
-"In Progress," "In Review," and "Done." There will be no login for this application as this is just the very
-first testing thing to ensure that our basic features are set up. For each task in the UI for a task card,
-you should be able to change the current status of the task between the different columns in the Kanban work board.
-You should be able to leave an unlimited number of comments for a particular card. You should be able to, from that task
-card, assign one of the valid users. When you first launch Taskify, it's going to give you a list of the five users to pick
-from. There will be no password required. When you click on a user, you go into the main view, which displays the list of
-projects. When you click on a project, you open the Kanban board for that project. You're going to see the columns.
-You'll be able to drag and drop cards back and forth between different columns. You will see any cards that are
-assigned to you, the currently logged in user, in a different color from all the other ones, so you can quickly
-see yours. You can edit any comments that you make, but you can't edit comments that other people made. You can
-delete any comments that you made, but you can't delete comments anybody else made.
+開發 Taskify，一個團隊生產力平台。它應該允許使用者建立專案、新增團隊成員、
+分配任務、評論並以看板風格在板之間移動任務。在這個功能的初始階段，
+我們稱之為「建立 Taskify」，讓我們有多個使用者，但使用者將提前宣告、預定義。
+我希望有五個使用者，分為兩個不同類別，一個產品經理和四個工程師。讓我們建立三個
+不同的樣本專案。讓我們為每個任務的狀態設定標準的看板欄位，例如「待辦」、
+「進行中」、「審查中」和「完成」。這個應用程式將沒有登入功能，因為這只是
+確保我們的基本功能已設置好的第一次測試。對於 UI 中任務卡片的每個任務，
+您應該能夠在看板工作板的不同欄位之間更改任務的當前狀態。
+您應該能夠為特定卡片留下無限數量的評論。您應該能夠從該任務
+卡片分配其中一個有效使用者。當您首次啟動 Taskify 時，它會給您五個使用者的清單供您選擇
+。不需要密碼。當您點擊使用者時，您會進入主視圖，顯示專案
+清單。當您點擊專案時，您會打開該專案的看板。您將看到欄位。
+您將能夠在不同欄位之間來回拖放卡片。您將看到分配給您
+的任何卡片，當前登入的使用者，與所有其他卡片顏色不同，因此您可以快速
+看到您的卡片。您可以編輯您所做的任何評論，但不能編輯其他人所做的評論。您可以
+刪除您所做的任何評論，但不能刪除其他人所做的評論。
 ```
 
-### Step 2: Refine the Specification
+### 步驟 2：精煉規格
 
-After the initial specification is created, clarify any missing requirements:
+初始規格建立後，澄清任何遺失的需求：
 
 ```text
-For each sample project or project that you create there should be a variable number of tasks between 5 and 15
-tasks for each one randomly distributed into different states of completion. Make sure that there's at least
-one task in each stage of completion.
+對於您建立的每個樣本專案或專案，應該有 5 到 15 個之間的可變數量任務
+每個任務隨機分佈到不同的完成狀態。確保每個完成階段至少有一個任務。
 ```
 
-Also validate the specification checklist:
+同時驗證規格檢查清單：
 
 ```text
-Read the review and acceptance checklist, and check off each item in the checklist if the feature spec meets the criteria. Leave it empty if it does not.
+閱讀審查和驗收檢查清單，如果功能規格符合標準，請勾選檢查清單中的每個項目。如果不符合，請留空。
 ```
 
-### Step 3: Generate Technical Plan with `/speckit.plan`
+### 步驟 3：使用 `/speckit.plan` 生成技術計畫
 
-Be specific about your tech stack and technical requirements:
+具體說明您的技術堆疊和技術要求：
 
 ```text
-We are going to generate this using .NET Aspire, using Postgres as the database. The frontend should use
-Blazor server with drag-and-drop task boards, real-time updates. There should be a REST API created with a projects API,
-tasks API, and a notifications API.
+我們將使用 .NET Aspire 生成這個，使用 Postgres 作為資料庫。前端應該使用
+具有拖放任務板、即時更新的 Blazor 伺服器。應該建立一個 REST API，包含專案 API、
+任務 API 和通知 API。
 ```
 
-### Step 4: Validate and Implement
+### 步驟 4：驗證並實作
 
-Have your AI agent audit the implementation plan:
+讓您的 AI 代理審核實作計畫：
 
 ```text
-Now I want you to go and audit the implementation plan and the implementation detail files.
-Read through it with an eye on determining whether or not there is a sequence of tasks that you need
-to be doing that are obvious from reading this. Because I don't know if there's enough here.
+現在我想讓您去審核實作計畫和實作細節檔案。
+仔細閱讀，確定是否有您需要做的任務序列
+從閱讀中可以明顯看出來。因為我不知道這裡是否足夠。
 ```
 
-Finally, implement the solution:
+最後，實作解決方案：
 
 ```text
 implement specs/002-create-taskify/plan.md
 ```
 
-## Key Principles
+## 關鍵原則
 
-- **Be explicit** about what you're building and why
-- **Don't focus on tech stack** during specification phase
-- **Iterate and refine** your specifications before implementation
-- **Validate** the plan before coding begins
-- **Let the AI agent handle** the implementation details
+- **明確說明**您正在建構的內容和原因
+- **在規格階段不要專注於技術堆疊**
+- **在實作之前迭代和精煉**您的規格
+- **在編碼開始之前驗證**計畫
+- **讓 AI 代理處理**實作細節
 
-## Next Steps
+## 後續步驟
 
-- Read the complete methodology for in-depth guidance
-- Check out more examples in the repository
-- Explore the source code on GitHub
+- 閱讀完整的方法論以獲得深入指導
+- 查看儲存庫中的更多範例
+- 探索 GitHub 上的原始碼

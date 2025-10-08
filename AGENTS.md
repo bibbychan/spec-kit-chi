@@ -1,68 +1,68 @@
 # AGENTS.md
 
-## About Spec Kit and Specify
+## 關於 Spec Kit 和 Specify
 
-**GitHub Spec Kit** is a comprehensive toolkit for implementing Spec-Driven Development (SDD) - a methodology that emphasizes creating clear specifications before implementation. The toolkit includes templates, scripts, and workflows that guide development teams through a structured approach to building software.
+**GitHub Spec Kit** 是一個實施 Spec-Driven Development (SDD) 的完整工具包 - 這是一種強調在實作之前創建清晰規格的方法論。該工具包包含範本、腳本和工作流程，指導開發團隊透過結構化方法建構軟體。
 
-**Specify CLI** is the command-line interface that bootstraps projects with the Spec Kit framework. It sets up the necessary directory structures, templates, and AI agent integrations to support the Spec-Driven Development workflow.
+**Specify CLI** 是命令列介面，使用 Spec Kit 框架引導專案。它設置必要的目錄結構、範本和 AI 代理整合，以支援 Spec-Driven Development 工作流程。
 
-The toolkit supports multiple AI coding assistants, allowing teams to use their preferred tools while maintaining consistent project structure and development practices.
+該工具包支援多個 AI 程式碼助手，允許團隊使用其偏好的工具，同時保持一致的專案結構和開發實踐。
 
 ---
 
-## General practices
+## 一般實踐
 
-- Any changes to `__init__.py` for the Specify CLI require a version rev in `pyproject.toml` and addition of entries to `CHANGELOG.md`.
+- 對 Specify CLI 的 `__init__.py` 的任何變更都需要在 `pyproject.toml` 中進行版本修訂並在 `CHANGELOG.md` 中新增條目。
 
-## Adding New Agent Support
+## 新增代理支援
 
-This section explains how to add support for new AI agents/assistants to the Specify CLI. Use this guide as a reference when integrating new AI tools into the Spec-Driven Development workflow.
+本節說明如何為 Specify CLI 新增對新 AI 代理/助手的支援。將新 AI 工具整合到 Spec-Driven Development 工作流程時，請使用本指南作為參考。
 
-### Overview
+### 概述
 
-Specify supports multiple AI agents by generating agent-specific command files and directory structures when initializing projects. Each agent has its own conventions for:
+Specify 透過在初始化專案時生成代理特定的指令檔案和目錄結構來支援多個 AI 代理。每個代理都有自己的慣例：
 
-- **Command file formats** (Markdown, TOML, etc.)
-- **Directory structures** (`.claude/commands/`, `.windsurf/workflows/`, etc.)
-- **Command invocation patterns** (slash commands, CLI tools, etc.)
-- **Argument passing conventions** (`$ARGUMENTS`, `{{args}}`, etc.)
+- **指令檔案格式**（Markdown、TOML 等）
+- **目錄結構**（`.claude/commands/`、`.windsurf/workflows/` 等）
+- **指令呼叫模式**（斜線指令、CLI 工具等）
+- **參數傳遞慣例**（`$ARGUMENTS`、`{{args}}` 等）
 
-### Current Supported Agents
+### 目前支援的代理
 
-| Agent | Directory | Format | CLI Tool | Description |
-|-------|-----------|---------|----------|-------------|
-| **Claude Code** | `.claude/commands/` | Markdown | `claude` | Anthropic's Claude Code CLI |
-| **Gemini CLI** | `.gemini/commands/` | TOML | `gemini` | Google's Gemini CLI |
-| **GitHub Copilot** | `.github/prompts/` | Markdown | N/A (IDE-based) | GitHub Copilot in VS Code |
+| 代理 | 目錄 | 格式 | CLI 工具 | 描述 |
+|------|------|------|---------|------|
+| **Claude Code** | `.claude/commands/` | Markdown | `claude` | Anthropic 的 Claude Code CLI |
+| **Gemini CLI** | `.gemini/commands/` | TOML | `gemini` | Google 的 Gemini CLI |
+| **GitHub Copilot** | `.github/prompts/` | Markdown | N/A (基於 IDE) | VS Code 中的 GitHub Copilot |
 | **Cursor** | `.cursor/commands/` | Markdown | `cursor-agent` | Cursor CLI |
-| **Qwen Code** | `.qwen/commands/` | TOML | `qwen` | Alibaba's Qwen Code CLI |
+| **Qwen Code** | `.qwen/commands/` | TOML | `qwen` | 阿里巴巴的 Qwen Code CLI |
 | **opencode** | `.opencode/command/` | Markdown | `opencode` | opencode CLI |
-| **Windsurf** | `.windsurf/workflows/` | Markdown | N/A (IDE-based) | Windsurf IDE workflows |
+| **Windsurf** | `.windsurf/workflows/` | Markdown | N/A (基於 IDE) | Windsurf IDE 工作流程 |
 | **Amazon Q Developer CLI** | `.amazonq/prompts/` | Markdown | `q` | Amazon Q Developer CLI |
 
 
-### Step-by-Step Integration Guide
+### 逐步整合指南
 
-Follow these steps to add a new agent (using Windsurf as an example):
+請按照以下步驟新增代理（以 Windsurf 為例）：
 
-#### 1. Update AI_CHOICES Constant
+#### 1. 更新 AI_CHOICES 常數
 
-Add the new agent to the `AI_CHOICES` dictionary in `src/specify_cli/__init__.py`:
+將新代理新增到 `src/specify_cli/__init__.py` 中的 `AI_CHOICES` 字典：
 
 ```python
 AI_CHOICES = {
     "copilot": "GitHub Copilot",
-    "claude": "Claude Code", 
+    "claude": "Claude Code",
     "gemini": "Gemini CLI",
     "cursor": "Cursor",
     "qwen": "Qwen Code",
     "opencode": "opencode",
     "windsurf": "Windsurf",
-    "q": "Amazon Q Developer CLI"  # Add new agent here
+    "q": "Amazon Q Developer CLI"  # 在此新增新代理
 }
 ```
 
-Also update the `agent_folder_map` in the same file to include the new agent's folder for the security notice:
+同時更新同一檔案中的 `agent_folder_map` 以包含新代理的資料夾用於安全通知：
 
 ```python
 agent_folder_map = {
@@ -72,205 +72,205 @@ agent_folder_map = {
     "qwen": ".qwen/",
     "opencode": ".opencode/",
     "codex": ".codex/",
-    "windsurf": ".windsurf/",  
+    "windsurf": ".windsurf/",
     "kilocode": ".kilocode/",
     "auggie": ".auggie/",
     "copilot": ".github/",
-    "q": ".amazonq/" # Add new agent folder here
+    "q": ".amazonq/" # 在此新增新代理資料夾
 }
 ```
 
-#### 2. Update CLI Help Text
+#### 2. 更新 CLI 說明文字
 
-Update all help text and examples to include the new agent:
+更新所有說明文字和範例以包含新代理：
 
-- Command option help: `--ai` parameter description
-- Function docstrings and examples
-- Error messages with agent lists
+- 指令選項說明：`--ai` 參數描述
+- 函數文件字串和範例
+- 包含代理清單的錯誤訊息
 
-#### 3. Update README Documentation
+#### 3. 更新 README 文件
 
-Update the **Supported AI Agents** section in `README.md` to include the new agent:
+更新 `README.md` 中的 **支援的 AI 代理** 部分以包含新代理：
 
-- Add the new agent to the table with appropriate support level (Full/Partial)
-- Include the agent's official website link
-- Add any relevant notes about the agent's implementation
-- Ensure the table formatting remains aligned and consistent
+- 將新代理新增到表格中，並指定適當的支援級別（完整/部分）
+- 包含代理的官方網站連結
+- 新增關於代理實作的任何相關說明
+- 確保表格格式保持對齊和一致
 
-#### 4. Update Release Package Script
+#### 4. 更新發布套件腳本
 
-Modify `.github/workflows/scripts/create-release-packages.sh`:
+修改 `.github/workflows/scripts/create-release-packages.sh`：
 
-##### Add to ALL_AGENTS array:
+##### 新增到 ALL_AGENTS 陣列：
 ```bash
 ALL_AGENTS=(claude gemini copilot cursor qwen opencode windsurf q)
 ```
 
-##### Add case statement for directory structure:
+##### 新增目錄結構的 case 語句：
 ```bash
 case $agent in
-  # ... existing cases ...
+  # ... 現有案例 ...
   windsurf)
     mkdir -p "$base_dir/.windsurf/workflows"
     generate_commands windsurf md "\$ARGUMENTS" "$base_dir/.windsurf/workflows" "$script" ;;
 esac
 ```
 
-#### 4. Update GitHub Release Script
+#### 5. 更新 GitHub 發布腳本
 
-Modify `.github/workflows/scripts/create-github-release.sh` to include the new agent's packages:
+修改 `.github/workflows/scripts/create-github-release.sh` 以包含新代理的套件：
 
 ```bash
 gh release create "$VERSION" \
-  # ... existing packages ...
+  # ... 現有套件 ...
   .genreleases/spec-kit-template-windsurf-sh-"$VERSION".zip \
   .genreleases/spec-kit-template-windsurf-ps-"$VERSION".zip \
-  # Add new agent packages here
+  # 在此新增新代理套件
 ```
 
-#### 5. Update Agent Context Scripts
+#### 6. 更新代理上下文腳本
 
-##### Bash script (`scripts/bash/update-agent-context.sh`):
+##### Bash 腳本 (`scripts/bash/update-agent-context.sh`)：
 
-Add file variable:
+新增檔案變數：
 ```bash
 WINDSURF_FILE="$REPO_ROOT/.windsurf/rules/specify-rules.md"
 ```
 
-Add to case statement:
+新增到 case 語句：
 ```bash
 case "$AGENT_TYPE" in
-  # ... existing cases ...
+  # ... 現有案例 ...
   windsurf) update_agent_file "$WINDSURF_FILE" "Windsurf" ;;
-  "") 
-    # ... existing checks ...
+  "")
+    # ... 現有檢查 ...
     [ -f "$WINDSURF_FILE" ] && update_agent_file "$WINDSURF_FILE" "Windsurf";
-    # Update default creation condition
+    # 更新預設建立條件
     ;;
 esac
 ```
 
-##### PowerShell script (`scripts/powershell/update-agent-context.ps1`):
+##### PowerShell 腳本 (`scripts/powershell/update-agent-context.ps1`)：
 
-Add file variable:
+新增檔案變數：
 ```powershell
 $windsurfFile = Join-Path $repoRoot '.windsurf/rules/specify-rules.md'
 ```
 
-Add to switch statement:
+新增到 switch 語句：
 ```powershell
 switch ($AgentType) {
-    # ... existing cases ...
+    # ... 現有案例 ...
     'windsurf' { Update-AgentFile $windsurfFile 'Windsurf' }
     '' {
         foreach ($pair in @(
-            # ... existing pairs ...
+            # ... 現有對 ...
             @{file=$windsurfFile; name='Windsurf'}
         )) {
             if (Test-Path $pair.file) { Update-AgentFile $pair.file $pair.name }
         }
-        # Update default creation condition
+        # 更新預設建立條件
     }
 }
 ```
 
-#### 6. Update CLI Tool Checks (Optional)
+#### 7. 更新 CLI 工具檢查（可選）
 
-For agents that require CLI tools, add checks in the `check()` command and agent validation:
+對於需要 CLI 工具的代理，在 `check()` 指令和代理驗證中新增檢查：
 
 ```python
-# In check() command
+# 在 check() 指令中
 tracker.add("windsurf", "Windsurf IDE (optional)")
 windsurf_ok = check_tool_for_tracker("windsurf", "https://windsurf.com/", tracker)
 
-# In init validation (only if CLI tool required)
+# 在 init 驗證中（僅當需要 CLI 工具時）
 elif selected_ai == "windsurf":
     if not check_tool("windsurf", "Install from: https://windsurf.com/"):
         console.print("[red]Error:[/red] Windsurf CLI is required for Windsurf projects")
         agent_tool_missing = True
 ```
 
-**Note**: Skip CLI checks for IDE-based agents (Copilot, Windsurf).
+**注意**：對於基於 IDE 的代理（Copilot、Windsurf）跳過 CLI 檢查。
 
-## Agent Categories
+## 代理類別
 
-### CLI-Based Agents
-Require a command-line tool to be installed:
+### 基於 CLI 的代理
+需要安裝命令列工具：
 - **Claude Code**: `claude` CLI
-- **Gemini CLI**: `gemini` CLI  
+- **Gemini CLI**: `gemini` CLI
 - **Cursor**: `cursor-agent` CLI
 - **Qwen Code**: `qwen` CLI
 - **opencode**: `opencode` CLI
 
-### IDE-Based Agents
-Work within integrated development environments:
-- **GitHub Copilot**: Built into VS Code/compatible editors
-- **Windsurf**: Built into Windsurf IDE
+### 基於 IDE 的代理
+在整合開發環境中工作：
+- **GitHub Copilot**: 內建於 VS Code/相容編輯器
+- **Windsurf**: 內建於 Windsurf IDE
 
-## Command File Formats
+## 指令檔案格式
 
-### Markdown Format
-Used by: Claude, Cursor, opencode, Windsurf, Amazon Q Developer
+### Markdown 格式
+使用於：Claude、Cursor、opencode、Windsurf、Amazon Q Developer
 
 ```markdown
 ---
-description: "Command description"
+description: "指令描述"
 ---
 
-Command content with {SCRIPT} and $ARGUMENTS placeholders.
+包含 {SCRIPT} 和 $ARGUMENTS 佔位符的指令內容。
 ```
 
-### TOML Format
-Used by: Gemini, Qwen
+### TOML 格式
+使用於：Gemini、Qwen
 
 ```toml
-description = "Command description"
+description = "指令描述"
 
 prompt = """
-Command content with {SCRIPT} and {{args}} placeholders.
+包含 {SCRIPT} 和 {{args}} 佔位符的指令內容。
 """
 ```
 
-## Directory Conventions
+## 目錄慣例
 
-- **CLI agents**: Usually `.<agent-name>/commands/`
-- **IDE agents**: Follow IDE-specific patterns:
+- **CLI 代理**：通常為 `.<agent-name>/commands/`
+- **IDE 代理**：遵循 IDE 特定模式：
   - Copilot: `.github/prompts/`
   - Cursor: `.cursor/commands/`
   - Windsurf: `.windsurf/workflows/`
 
-## Argument Patterns
+## 參數模式
 
-Different agents use different argument placeholders:
-- **Markdown/prompt-based**: `$ARGUMENTS`
-- **TOML-based**: `{{args}}`
-- **Script placeholders**: `{SCRIPT}` (replaced with actual script path)
-- **Agent placeholders**: `__AGENT__` (replaced with agent name)
+不同的代理使用不同的參數佔位符：
+- **基於 Markdown/提示的**：`$ARGUMENTS`
+- **基於 TOML 的**：`{{args}}`
+- **腳本佔位符**：`{SCRIPT}`（替換為實際腳本路徑）
+- **代理佔位符**：`__AGENT__`（替換為代理名稱）
 
-## Testing New Agent Integration
+## 測試新代理整合
 
-1. **Build test**: Run package creation script locally
-2. **CLI test**: Test `specify init --ai <agent>` command
-3. **File generation**: Verify correct directory structure and files
-4. **Command validation**: Ensure generated commands work with the agent
-5. **Context update**: Test agent context update scripts
+1. **建構測試**：在本地執行套件建立腳本
+2. **CLI 測試**：測試 `specify init --ai <agent>` 指令
+3. **檔案生成**：驗證正確的目錄結構和檔案
+4. **指令驗證**：確保生成的指令與代理一起工作
+5. **上下文更新**：測試代理上下文更新腳本
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Forgetting update scripts**: Both bash and PowerShell scripts must be updated
-2. **Missing CLI checks**: Only add for agents that actually have CLI tools
-3. **Wrong argument format**: Use correct placeholder format for each agent type
-4. **Directory naming**: Follow agent-specific conventions exactly
-5. **Help text inconsistency**: Update all user-facing text consistently
+1. **忘記更新腳本**：必須同時更新 bash 和 PowerShell 腳本
+2. **缺少 CLI 檢查**：僅為實際具有 CLI 工具的代理新增
+3. **錯誤的參數格式**：對每種代理類型使用正確的佔位符格式
+4. **目錄命名**：完全遵循代理特定慣例
+5. **說明文字不一致**：一致地更新所有面向使用者的文字
 
-## Future Considerations
+## 未來考量
 
-When adding new agents:
-- Consider the agent's native command/workflow patterns
-- Ensure compatibility with the Spec-Driven Development process
-- Document any special requirements or limitations
-- Update this guide with lessons learned
+新增代理時：
+- 考慮代理的原生指令/工作流程模式
+- 確保與 Spec-Driven Development 程序的相容性
+- 記錄任何特殊要求或限制
+- 使用經驗教訓更新本指南
 
 ---
 
-*This documentation should be updated whenever new agents are added to maintain accuracy and completeness.*
+*每當新增新代理時都應更新此文件，以保持準確性和完整性。*

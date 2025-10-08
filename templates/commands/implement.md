@@ -1,92 +1,92 @@
 ---
-description: Execute the implementation plan by processing and executing all tasks defined in tasks.md
+description: 透過處理和執行 tasks.md 中定義的所有任務來執行實作計畫。
 scripts:
   sh: scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks
   ps: scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks
 ---
 
-## User Input
+## 使用者輸入
 
 ```text
 $ARGUMENTS
 ```
 
-You **MUST** consider the user input before proceeding (if not empty).
+您**必須**在繼續之前考慮使用者輸入（如果不為空）。
 
-## Outline
+## 概要
 
-1. Run `{SCRIPT}` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute.
+1. 從儲存庫根目錄執行 `{SCRIPT}` 並解析 FEATURE_DIR 和 AVAILABLE_DOCS 列表。所有路徑必須是絕對的。
 
-2. **Check checklists status** (if FEATURE_DIR/checklists/ exists):
-   - Scan all checklist files in the checklists/ directory
-   - For each checklist, count:
-     * Total items: All lines matching `- [ ]` or `- [X]` or `- [x]`
-     * Completed items: Lines matching `- [X]` or `- [x]`
-     * Incomplete items: Lines matching `- [ ]`
-   - Create a status table:
+2. **檢查檢查清單狀態**（如果 FEATURE_DIR/checklists/ 存在）：
+   - 掃描 checklists/ 目錄中的所有檢查清單文件
+   - 對於每個檢查清單，計數：
+     * 總項目：所有符合 `- [ ]` 或 `- [X]` 或 `- [x]` 的行
+     * 已完成項目：符合 `- [X]` 或 `- [x]` 的行
+     * 未完成項目：符合 `- [ ]` 的行
+   - 創建狀態表格：
      ```
-     | Checklist | Total | Completed | Incomplete | Status |
+     | 檢查清單 | 總數 | 已完成 | 未完成 | 狀態 |
      |-----------|-------|-----------|------------|--------|
      | ux.md     | 12    | 12        | 0          | ✓ PASS |
      | test.md   | 8     | 5         | 3          | ✗ FAIL |
      | security.md | 6   | 6         | 0          | ✓ PASS |
      ```
-   - Calculate overall status:
-     * **PASS**: All checklists have 0 incomplete items
-     * **FAIL**: One or more checklists have incomplete items
-   
-   - **If any checklist is incomplete**:
-     * Display the table with incomplete item counts
-     * **STOP** and ask: "Some checklists are incomplete. Do you want to proceed with implementation anyway? (yes/no)"
-     * Wait for user response before continuing
-     * If user says "no" or "wait" or "stop", halt execution
-     * If user says "yes" or "proceed" or "continue", proceed to step 3
-   
-   - **If all checklists are complete**:
-     * Display the table showing all checklists passed
-     * Automatically proceed to step 3
+   - 計算整體狀態：
+     * **PASS**：所有檢查清單都有 0 個未完成項目
+     * **FAIL**：一個或多個檢查清單有未完成項目
 
-3. Load and analyze the implementation context:
-   - **REQUIRED**: Read tasks.md for the complete task list and execution plan
-   - **REQUIRED**: Read plan.md for tech stack, architecture, and file structure
-   - **IF EXISTS**: Read data-model.md for entities and relationships
-   - **IF EXISTS**: Read contracts/ for API specifications and test requirements
-   - **IF EXISTS**: Read research.md for technical decisions and constraints
-   - **IF EXISTS**: Read quickstart.md for integration scenarios
+   - **如果任何檢查清單未完成**：
+     * 顯示具有未完成項目計數的表格
+     * **停止**並詢問：「某些檢查清單未完成。您是否仍要繼續實作？（yes/no）」
+     * 在繼續之前等待使用者回應
+     * 如果使用者說「no」、「wait」或「stop」，停止執行
+     * 如果使用者說「yes」、「proceed」或「continue」，繼續到步驟 3
 
-4. Parse tasks.md structure and extract:
-   - **Task phases**: Setup, Tests, Core, Integration, Polish
-   - **Task dependencies**: Sequential vs parallel execution rules
-   - **Task details**: ID, description, file paths, parallel markers [P]
-   - **Execution flow**: Order and dependency requirements
+   - **如果所有檢查清單都已完成**：
+     * 顯示顯示所有檢查清單通過的表格
+     * 自動繼續到步驟 3
 
-5. Execute implementation following the task plan:
-   - **Phase-by-phase execution**: Complete each phase before moving to the next
-   - **Respect dependencies**: Run sequential tasks in order, parallel tasks [P] can run together  
-   - **Follow TDD approach**: Execute test tasks before their corresponding implementation tasks
-   - **File-based coordination**: Tasks affecting the same files must run sequentially
-   - **Validation checkpoints**: Verify each phase completion before proceeding
+3. 載入和分析實作上下文：
+   - **必需**：讀取 tasks.md 獲取完整任務列表和執行計畫
+   - **必需**：讀取 plan.md 獲取技術堆疊、架構和文件結構
+   - **如果存在**：讀取 data-model.md 獲取實體和關係
+   - **如果存在**：讀取 contracts/ 獲取 API 規格和測試要求
+   - **如果存在**：讀取 research.md 獲取技術決策和約束
+   - **如果存在**：讀取 quickstart.md 獲取整合場景
 
-6. Implementation execution rules:
-   - **Setup first**: Initialize project structure, dependencies, configuration
-   - **Tests before code**: If you need to write tests for contracts, entities, and integration scenarios
-   - **Core development**: Implement models, services, CLI commands, endpoints
-   - **Integration work**: Database connections, middleware, logging, external services
-   - **Polish and validation**: Unit tests, performance optimization, documentation
+4. 解析 tasks.md 結構並提取：
+   - **任務階段**：設定、測試、核心、整合、精煉
+   - **任務依賴**：順序與並行執行規則
+   - **任務詳情**：ID、描述、文件路徑、並行標記 [P]
+   - **執行流程**：順序和依賴要求
 
-7. Progress tracking and error handling:
-   - Report progress after each completed task
-   - Halt execution if any non-parallel task fails
-   - For parallel tasks [P], continue with successful tasks, report failed ones
-   - Provide clear error messages with context for debugging
-   - Suggest next steps if implementation cannot proceed
-   - **IMPORTANT** For completed tasks, make sure to mark the task off as [X] in the tasks file.
+5. 遵循任務計畫執行實作：
+   - **按階段執行**：在移動到下一階段之前完成每個階段
+   - **尊重依賴**：按順序執行順序任務，並行任務 [P] 可以一起執行
+   - **遵循 TDD 方法**：在其對應的實作任務之前執行測試任務
+   - **基於文件的協調**：影響相同文件的任務必須按順序執行
+   - **驗證檢查點**：在繼續之前驗證每個階段的完成
 
-8. Completion validation:
-   - Verify all required tasks are completed
-   - Check that implemented features match the original specification
-   - Validate that tests pass and coverage meets requirements
-   - Confirm the implementation follows the technical plan
-   - Report final status with summary of completed work
+6. 實作執行規則：
+   - **設定優先**：初始化項目結構、依賴項、配置
+   - **測試先於代碼**：如果您需要為合約、實體和整合場景編寫測試
+   - **核心開發**：實作模型、服務、CLI 命令、端點
+   - **整合工作**：資料庫連接、中介軟體、日誌記錄、外部服務
+   - **精煉和驗證**：單元測試、效能優化、文檔
 
-Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/tasks` first to regenerate the task list.
+7. 進度追蹤和錯誤處理：
+   - 在每個完成的任務後報告進度
+   - 如果任何非並行任務失敗，停止執行
+   - 對於並行任務 [P]，繼續成功的任務，報告失敗的任務
+   - 提供清晰的錯誤訊息和調試上下文
+   - 如果實作無法繼續，建議下一步
+   - **重要**對於已完成的任務，確保在任務文件中將任務標記為 [X]。
+
+8. 完成驗證：
+   - 驗證所有必需的任務已完成
+   - 檢查實作的功能是否符合原始規格
+   - 驗證測試通過且覆蓋率符合要求
+   - 確認實作遵循技術計畫
+   - 報告最終狀態和已完成工作的摘要
+
+注意：此命令假設 tasks.md 中存在完整的任務分解。如果任務不完整或缺失，建議先運行 `/tasks` 重新生成任務列表。

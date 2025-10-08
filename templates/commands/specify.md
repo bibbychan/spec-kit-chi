@@ -1,211 +1,211 @@
 ---
-description: Create or update the feature specification from a natural language feature description.
+description: 從自然語言功能描述創建或更新功能規格。
 scripts:
   sh: scripts/bash/create-new-feature.sh --json "{ARGS}"
   ps: scripts/powershell/create-new-feature.ps1 -Json "{ARGS}"
 ---
 
-## User Input
+## 使用者輸入
 
 ```text
 $ARGUMENTS
 ```
 
-You **MUST** consider the user input before proceeding (if not empty).
+您**必須**在繼續之前考慮使用者輸入（如果不為空）。
 
-## Outline
+## 概要
 
-The text the user typed after `/speckit.specify` in the triggering message **is** the feature description. Assume you always have it available in this conversation even if `{ARGS}` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
+使用者在觸發訊息中在 `/speckit.specify` 之後輸入的文字**就是**功能描述。假設您在此對話中始終可以使用它，即使 `{ARGS}` 在下方字面上出現。除非使用者提供空指令，否則不要要求使用者重複。
 
-Given that feature description, do this:
+基於該功能描述，執行以下操作：
 
-1. Run the script `{SCRIPT}` from repo root and parse its JSON output for BRANCH_NAME and SPEC_FILE. All file paths must be absolute.
-  **IMPORTANT** You must only ever run this script once. The JSON is provided in the terminal as output - always refer to it to get the actual content you're looking for.
-2. Load `templates/spec-template.md` to understand required sections.
+1. 從儲存庫根目錄執行腳本 `{SCRIPT}` 並解析其 JSON 輸出中的 BRANCH_NAME 和 SPEC_FILE。所有檔案路徑必須是絕對的。
+  **重要**您只能執行此腳本一次。JSON 在終端機中作為輸出提供 - 始終參考它以獲得您尋找的實際內容。
+2. 載入 `templates/spec-template.md` 以了解必要的部分。
 
-3. Follow this execution flow:
+3. 遵循此執行流程：
 
-    1. Parse user description from Input
-       If empty: ERROR "No feature description provided"
-    2. Extract key concepts from description
-       Identify: actors, actions, data, constraints
-    3. For unclear aspects:
-       - Make informed guesses based on context and industry standards
-       - Only mark with [NEEDS CLARIFICATION: specific question] if:
-         - The choice significantly impacts feature scope or user experience
-         - Multiple reasonable interpretations exist with different implications
-         - No reasonable default exists
-       - **LIMIT: Maximum 3 [NEEDS CLARIFICATION] markers total**
-       - Prioritize clarifications by impact: scope > security/privacy > user experience > technical details
-    4. Fill User Scenarios & Testing section
-       If no clear user flow: ERROR "Cannot determine user scenarios"
-    5. Generate Functional Requirements
-       Each requirement must be testable
-       Use reasonable defaults for unspecified details (document assumptions in Assumptions section)
-    6. Define Success Criteria
-       Create measurable, technology-agnostic outcomes
-       Include both quantitative metrics (time, performance, volume) and qualitative measures (user satisfaction, task completion)
-       Each criterion must be verifiable without implementation details
-    7. Identify Key Entities (if data involved)
-    8. Return: SUCCESS (spec ready for planning)
+    1. 從輸入解析使用者描述
+       如果為空：錯誤 "未提供功能描述"
+    2. 從描述中提取關鍵概念
+       識別：行為者、動作、資料、約束
+    3. 對於不清楚的方面：
+       - 基於上下文和行業標準做出明智的猜測
+       - 僅在以下情況下標記為 [NEEDS CLARIFICATION: specific question]：
+         - 選擇顯著影響功能範圍或使用者體驗
+         - 存在多種合理的解釋且具有不同的影響
+         - 不存在合理的預設值
+       - **限制：最多 3 個 [NEEDS CLARIFICATION] 標記總數**
+       - 按影響優先考慮澄清：範圍 > 安全性/隱私 > 使用者體驗 > 技術細節
+    4. 填寫使用者場景和測試部分
+       如果沒有清晰的使用者流程：錯誤 "無法確定使用者場景"
+    5. 產生功能需求
+       每個需求必須可測試
+       為未指定的細節使用合理的預設值（在假設部分記錄假設）
+    6. 定義成功標準
+       創建可衡量、技術不可知的結果
+       包括定量指標（時間、效能、數量）和定性措施（使用者滿意度、任務完成）
+       每個標準必須可以在沒有實作細節的情況下驗證
+    7. 識別關鍵實體（如果涉及資料）
+    8. 返回：成功（規格準備好進行規劃）
 
-4. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
+4. 使用範本結構將規格寫入 SPEC_FILE，用從功能描述（參數）衍生的具體細節替換佔位符，同時保留部分順序和標題。
 
-5. **Specification Quality Validation**: After writing the initial spec, validate it against quality criteria:
+5. **規格品質驗證**：撰寫初始規格後，根據品質標準驗證它：
 
-   a. **Create Spec Quality Checklist**: Generate a checklist file at `FEATURE_DIR/checklists/requirements.md` using the checklist template structure with these validation items:
-   
+   a. **創建規格品質檢查清單**：使用檢查清單範本結構在 `FEATURE_DIR/checklists/requirements.md` 生成檢查清單檔案，包含以下驗證項目：
+
       ```markdown
-      # Specification Quality Checklist: [FEATURE NAME]
-      
-      **Purpose**: Validate specification completeness and quality before proceeding to planning
-      **Created**: [DATE]
-      **Feature**: [Link to spec.md]
-      
-      ## Content Quality
-      
-      - [ ] No implementation details (languages, frameworks, APIs)
-      - [ ] Focused on user value and business needs
-      - [ ] Written for non-technical stakeholders
-      - [ ] All mandatory sections completed
-      
-      ## Requirement Completeness
-      
-      - [ ] No [NEEDS CLARIFICATION] markers remain
-      - [ ] Requirements are testable and unambiguous
-      - [ ] Success criteria are measurable
-      - [ ] Success criteria are technology-agnostic (no implementation details)
-      - [ ] All acceptance scenarios are defined
-      - [ ] Edge cases are identified
-      - [ ] Scope is clearly bounded
-      - [ ] Dependencies and assumptions identified
-      
-      ## Feature Readiness
-      
-      - [ ] All functional requirements have clear acceptance criteria
-      - [ ] User scenarios cover primary flows
-      - [ ] Feature meets measurable outcomes defined in Success Criteria
-      - [ ] No implementation details leak into specification
-      
-      ## Notes
-      
-      - Items marked incomplete require spec updates before `/speckit.clarify` or `/speckit.plan`
+      # 規格品質檢查清單：[功能名稱]
+
+      **目的**：在繼續規劃之前驗證規格的完整性和品質
+      **創建日期**：[日期]
+      **功能**：[連結到 spec.md]
+
+      ## 內容品質
+
+      - [ ] 沒有實作細節（語言、框架、API）
+      - [ ] 專注於使用者價值和業務需求
+      - [ ] 為非技術利益相關者撰寫
+      - [ ] 所有必需部分已完成
+
+      ## 需求完整性
+
+      - [ ] 沒有 [NEEDS CLARIFICATION] 標記剩餘
+      - [ ] 需求是可測試和明確的
+      - [ ] 成功標準是可衡量的
+      - [ ] 成功標準是技術不可知的（無實作細節）
+      - [ ] 所有驗收場景都已定義
+      - [ ] 邊緣案例已被識別
+      - [ ] 範圍明確界定
+      - [ ] 依賴關係和假設已識別
+
+      ## 功能準備度
+
+      - [ ] 所有功能需求都有清晰的驗收標準
+      - [ ] 使用者場景涵蓋主要流程
+      - [ ] 功能滿足成功標準中定義的可衡量結果
+      - [ ] 沒有實作細節洩漏到規格中
+
+      ## 註記
+
+      - 標記為未完成的項目需要在 `/speckit.clarify` 或 `/speckit.plan` 之前更新規格
       ```
-   
-   b. **Run Validation Check**: Review the spec against each checklist item:
-      - For each item, determine if it passes or fails
-      - Document specific issues found (quote relevant spec sections)
-   
-   c. **Handle Validation Results**:
-      
-      - **If all items pass**: Mark checklist complete and proceed to step 6
-      
-      - **If items fail (excluding [NEEDS CLARIFICATION])**:
-        1. List the failing items and specific issues
-        2. Update the spec to address each issue
-        3. Re-run validation until all items pass (max 3 iterations)
-        4. If still failing after 3 iterations, document remaining issues in checklist notes and warn user
-      
-      - **If [NEEDS CLARIFICATION] markers remain**:
-        1. Extract all [NEEDS CLARIFICATION: ...] markers from the spec
-        2. **LIMIT CHECK**: If more than 3 markers exist, keep only the 3 most critical (by scope/security/UX impact) and make informed guesses for the rest
-        3. For each clarification needed (max 3), present options to user in this format:
-        
+
+   b. **執行驗證檢查**：根據每個檢查清單項目審查規格：
+      - 對於每個項目，確定它通過還是失敗
+      - 記錄發現的具體問題（引用相關規格部分）
+
+   c. **處理驗證結果**：
+
+      - **如果所有項目通過**：標記檢查清單完成並繼續步驟 6
+
+      - **如果項目失敗（不包括 [NEEDS CLARIFICATION]）**：
+        1. 列出失敗的項目和具體問題
+        2. 更新規格以解決每個問題
+        3. 重新執行驗證，直到所有項目通過（最多 3 次迭代）
+        4. 如果 3 次迭代後仍然失敗，在檢查清單註記中記錄剩餘問題並警告使用者
+
+      - **如果 [NEEDS CLARIFICATION] 標記仍然存在**：
+        1. 從規格中提取所有 [NEEDS CLARIFICATION: ...] 標記
+        2. **限制檢查**：如果存在超過 3 個標記，只保留 3 個最關鍵的（按範圍/安全性/UX 影響），其餘的做出明智猜測
+        3. 對於每個需要的澄清（最多 3 個），以此格式向使用者呈現選項：
+
            ```markdown
-           ## Question [N]: [Topic]
-           
-           **Context**: [Quote relevant spec section]
-           
-           **What we need to know**: [Specific question from NEEDS CLARIFICATION marker]
-           
-           **Suggested Answers**:
-           
-           | Option | Answer | Implications |
-           |--------|--------|--------------|
-           | A      | [First suggested answer] | [What this means for the feature] |
-           | B      | [Second suggested answer] | [What this means for the feature] |
-           | C      | [Third suggested answer] | [What this means for the feature] |
-           | Custom | Provide your own answer | [Explain how to provide custom input] |
-           
-           **Your choice**: _[Wait for user response]_
+           ## 問題 [N]：[主題]
+
+           **上下文**：[引用相關規格部分]
+
+           **我們需要知道的**：[來自 NEEDS CLARIFICATION 標記的具體問題]
+
+           **建議答案**：
+
+           | 選項 | 答案 | 影響 |
+           |------|------|------|
+           | A    | [第一個建議答案] | [這對功能意味著什麼] |
+           | B    | [第二個建議答案] | [這對功能意味著什麼] |
+           | C    | [第三個建議答案] | [這對功能意味著什麼] |
+           | 自訂 | 提供您自己的答案 | [解釋如何提供自訂輸入] |
+
+           **您的選擇**：_[等待使用者回應]_
            ```
-        
-        4. **CRITICAL - Table Formatting**: Ensure markdown tables are properly formatted:
-           - Use consistent spacing with pipes aligned
-           - Each cell should have spaces around content: `| Content |` not `|Content|`
-           - Header separator must have at least 3 dashes: `|--------|`
-           - Test that the table renders correctly in markdown preview
-        5. Number questions sequentially (Q1, Q2, Q3 - max 3 total)
-        6. Present all questions together before waiting for responses
-        7. Wait for user to respond with their choices for all questions (e.g., "Q1: A, Q2: Custom - [details], Q3: B")
-        8. Update the spec by replacing each [NEEDS CLARIFICATION] marker with the user's selected or provided answer
-        9. Re-run validation after all clarifications are resolved
-   
-   d. **Update Checklist**: After each validation iteration, update the checklist file with current pass/fail status
 
-6. Report completion with branch name, spec file path, checklist results, and readiness for the next phase (`/speckit.clarify` or `/speckit.plan`).
+        4. **關鍵 - 表格格式**：確保 markdown 表格格式正確：
+           - 使用一致的間距，管道符號對齊
+           - 每個單元格應在內容周圍有空格：`| 內容 |` 而不是 `|內容|`
+           - 標題分隔符必須至少有 3 個破折號：`|--------|`
+           - 測試表格在 markdown 預覽中正確呈現
+        5. 按順序編號問題（Q1、Q2、Q3 - 最多 3 個總數）
+        6. 在等待回應之前一起呈現所有問題
+        7. 等待使用者回應所有問題的選擇（例如，"Q1: A, Q2: 自訂 - [細節], Q3: B"）
+        8. 通過用使用者選擇或提供的答案替換每個 [NEEDS CLARIFICATION] 標記來更新規格
+        9. 所有澄清解決後重新執行驗證
 
-**NOTE:** The script creates and checks out the new branch and initializes the spec file before writing.
+   d. **更新檢查清單**：每次驗證迭代後，使用當前的通過/失敗狀態更新檢查清單檔案
 
-## General Guidelines
+6. 報告完成情況，包括分支名稱、規格檔案路徑、檢查清單結果以及下一階段（`/speckit.clarify` 或 `/speckit.plan`）的準備情況。
 
-## Quick Guidelines
+**注意**：腳本在寫入之前創建並檢出新的分支並初始化規格檔案。
 
-- Focus on **WHAT** users need and **WHY**.
-- Avoid HOW to implement (no tech stack, APIs, code structure).
-- Written for business stakeholders, not developers.
-- DO NOT create any checklists that are embedded in the spec. That will be a separate command.
+## 一般指導方針�
 
-### Section Requirements
+## 快速指導方針
 
-- **Mandatory sections**: Must be completed for every feature
-- **Optional sections**: Include only when relevant to the feature
-- When a section doesn't apply, remove it entirely (don't leave as "N/A")
+- 專注於使用者需要的**什麼**和**為什麼**。
+- 避免如何實作（無技術堆疊、API、程式碼結構）。
+- 為業務利益相關者撰寫，而不是為開發人員。
+- 不要創建任何嵌入在規格中的檢查清單。那將是一個單獨的指令。
 
-### For AI Generation
+### 部分要求
 
-When creating this spec from a user prompt:
+- **必需部分**：每個功能都必須完成
+- **可選部分**：僅在與功能相關時包含
+- 當某個部分不適用時，完全刪除它（不要留作 "N/A"）
 
-1. **Make informed guesses**: Use context, industry standards, and common patterns to fill gaps
-2. **Document assumptions**: Record reasonable defaults in the Assumptions section
-3. **Limit clarifications**: Maximum 3 [NEEDS CLARIFICATION] markers - use only for critical decisions that:
-   - Significantly impact feature scope or user experience
-   - Have multiple reasonable interpretations with different implications
-   - Lack any reasonable default
-4. **Prioritize clarifications**: scope > security/privacy > user experience > technical details
-5. **Think like a tester**: Every vague requirement should fail the "testable and unambiguous" checklist item
-6. **Common areas needing clarification** (only if no reasonable default exists):
-   - Feature scope and boundaries (include/exclude specific use cases)
-   - User types and permissions (if multiple conflicting interpretations possible)
-   - Security/compliance requirements (when legally/financially significant)
-   
-**Examples of reasonable defaults** (don't ask about these):
+### AI 生成使用說明
 
-- Data retention: Industry-standard practices for the domain
-- Performance targets: Standard web/mobile app expectations unless specified
-- Error handling: User-friendly messages with appropriate fallbacks
-- Authentication method: Standard session-based or OAuth2 for web apps
-- Integration patterns: RESTful APIs unless specified otherwise
+從使用者提示創建此規格時：
 
-### Success Criteria Guidelines
+1. **做出明智的猜測**：使用上下文、行業標準和常見模式來填補空白
+2. **記錄假設**：在假設部分記錄合理的預設值
+3. **限制澄清**：最多 3 個 [NEEDS CLARIFICATION] 標記 - 僅用於關鍵決策：
+   - 顯著影響功能範圍或使用者體驗
+   - 存在多種合理的解釋且具有不同的影響
+   - 缺乏任何合理的預設值
+4. **優先考慮澄清**：範圍 > 安全性/隱私 > 使用者體驗 > 技術細節
+5. **像測試人員一樣思考**：每個模糊的需求都應該無法通過 "可測試和明確" 的檢查清單項目
+6. **需要澄清的常見領域**（僅當不存在合理的預設值時）：
+   - 功能範圍和邊界（包含/排除特定用例）
+   - 使用者類型和權限（如果可能存在多種衝突的解釋）
+   - 安全性/合規要求（當在法律/財務上重要時）
 
-Success criteria must be:
+**合理預設值的範例**（不要詢問這些）：
 
-1. **Measurable**: Include specific metrics (time, percentage, count, rate)
-2. **Technology-agnostic**: No mention of frameworks, languages, databases, or tools
-3. **User-focused**: Describe outcomes from user/business perspective, not system internals
-4. **Verifiable**: Can be tested/validated without knowing implementation details
+- 資料保留：該領域的行業標準實踐
+- 效能目標：標準網頁/行動應用程式期望，除非另有指定
+- 錯誤處理：具有適當回退的使用者友好訊息
+- 身份驗證方法：網頁應用程式的標準基於會話或 OAuth2
+- 整合模式：RESTful API，除非另有指定
 
-**Good examples**:
+### 成功標準指導方針
 
-- "Users can complete checkout in under 3 minutes"
-- "System supports 10,000 concurrent users"
-- "95% of searches return results in under 1 second"
-- "Task completion rate improves by 40%"
+成功標準必須：
 
-**Bad examples** (implementation-focused):
+1. **可衡量**：包含特定指標（時間、百分比、計數、速率）
+2. **技術不可知**：不提及框架、語言、資料庫或工具
+3. **使用者專注**：從使用者/業務角度描述結果，而不是系統內部
+4. **可驗證**：可以在不知道實作細節的情況下進行測試/驗證
 
-- "API response time is under 200ms" (too technical, use "Users see results instantly")
-- "Database can handle 1000 TPS" (implementation detail, use user-facing metric)
-- "React components render efficiently" (framework-specific)
-- "Redis cache hit rate above 80%" (technology-specific)
+**良好範例**：
+
+- "使用者可以在 3 分鐘內完成結帳"
+- "系統支援 10,000 個並發使用者"
+- "95% 的搜尋在 1 秒內返回結果"
+- "任務完成率提高 40%"
+
+**不良範例**（實作導向）：
+
+- "API 響應時間低於 200ms"（太技術性，使用 "使用者立即看到結果"）
+- "資料庫可以處理 1000 TPS"（實作細節，使用面向使用者的指標）
+- "React 元素高效渲染"（框架特定）
+- "Redis 快取命中率超過 80%"（技術特定）

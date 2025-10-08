@@ -1,115 +1,115 @@
 ---
-description: Generate an actionable, dependency-ordered tasks.md for the feature based on available design artifacts.
+description: 根據可用的設計產物為功能生成可執行的、依賴排序的 tasks.md。
 scripts:
   sh: scripts/bash/check-prerequisites.sh --json
   ps: scripts/powershell/check-prerequisites.ps1 -Json
 ---
 
-## User Input
+## 使用者輸入
 
 ```text
 $ARGUMENTS
 ```
 
-You **MUST** consider the user input before proceeding (if not empty).
+您**必須**在繼續之前考慮使用者輸入（如果不為空）。
 
-## Outline
+## 概要
 
-1. **Setup**: Run `{SCRIPT}` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute.
+1. **設定**：從儲存庫根目錄執行 `{SCRIPT}` 並解析 FEATURE_DIR 和 AVAILABLE_DOCS 列表。所有路徑必須是絕對的。
 
-2. **Load design documents**: Read from FEATURE_DIR:
-   - **Required**: plan.md (tech stack, libraries, structure), spec.md (user stories with priorities)
-   - **Optional**: data-model.md (entities), contracts/ (API endpoints), research.md (decisions), quickstart.md (test scenarios)
-   - Note: Not all projects have all documents. Generate tasks based on what's available.
+2. **載入設計文件**：從 FEATURE_DIR 讀取：
+   - **必需**：plan.md（技術堆疊、函式庫、結構）、spec.md（具有優先順序的使用者故事）
+   - **可選**：data-model.md（實體）、contracts/（API 端點）、research.md（決策）、quickstart.md（測試場景）
+   - 注意：並非所有項目都有所有文件。根據可用內容生成任務。
 
-3. **Execute task generation workflow** (follow the template structure):
-   - Load plan.md and extract tech stack, libraries, project structure
-   - **Load spec.md and extract user stories with their priorities (P1, P2, P3, etc.)**
-   - If data-model.md exists: Extract entities → map to user stories
-   - If contracts/ exists: Each file → map endpoints to user stories
-   - If research.md exists: Extract decisions → generate setup tasks
-   - **Generate tasks ORGANIZED BY USER STORY**:
-     - Setup tasks (shared infrastructure needed by all stories)
-     - **Foundational tasks (prerequisites that must complete before ANY user story can start)**
-     - For each user story (in priority order P1, P2, P3...):
-       - Group all tasks needed to complete JUST that story
-       - Include models, services, endpoints, UI components specific to that story
-       - Mark which tasks are [P] parallelizable
-       - If tests requested: Include tests specific to that story
-     - Polish/Integration tasks (cross-cutting concerns)
-   - **Tests are OPTIONAL**: Only generate test tasks if explicitly requested in the feature spec or user asks for TDD approach
-   - Apply task rules:
-     - Different files = mark [P] for parallel
-     - Same file = sequential (no [P])
-     - If tests requested: Tests before implementation (TDD order)
-   - Number tasks sequentially (T001, T002...)
-   - Generate dependency graph showing user story completion order
-   - Create parallel execution examples per user story
-   - Validate task completeness (each user story has all needed tasks, independently testable)
+3. **執行任務生成工作流程**（遵循範本結構）：
+   - 載入 plan.md 並提取技術堆疊、函式庫、項目結構
+   - **載入 spec.md 並提取具有優先順序的使用者故事（P1、P2、P3 等）**
+   - 如果存在 data-model.md：提取實體 → 映射到使用者故事
+   - 如果存在 contracts/：每個文件 → 將端點映射到使用者故事
+   - 如果存在 research.md：提取決策 → 生成設定任務
+   - **按使用者故事組織生成任務**：
+     - 設定任務（所有故事需要的共享基礎設施）
+     - **基礎任務（任何使用者故事可以開始之前必須完成的先決條件）**
+     - 對於每個使用者故事（按優先順序 P1、P2、P3...）：
+       - 將完成僅該故事所需的所有任務分組
+       - 包括該故事特定的模型、服務、端點、UI 組件
+       - 標記哪些任務是 [P] 可並行化的
+       - 如果要求測試：包括該故事特定的測試
+     - 精煉/整合任務（橫切關注點）
+   - **測試是可選的**：只有在功能規格中明確要求或使用者要求 TDD 方法時才生成測試任務
+   - 應用任務規則：
+     - 不同文件 = 標記 [P] 用於並行
+     - 相同文件 = 順序（無 [P]）
+     - 如果要求測試：實作之前的測試（TDD 順序）
+   - 按順序編號任務（T001、T002...）
+   - 生成顯示使用者故事完成順序的依賴圖
+   - 為每個使用者故事創建並行執行範例
+   - 驗證任務完整性（每個使用者故事具有所有需要的任務，可獨立測試）
 
-4. **Generate tasks.md**: Use `.specify/templates/tasks-template.md` as structure, fill with:
-   - Correct feature name from plan.md
-   - Phase 1: Setup tasks (project initialization)
-   - Phase 2: Foundational tasks (blocking prerequisites for all user stories)
-   - Phase 3+: One phase per user story (in priority order from spec.md)
-     - Each phase includes: story goal, independent test criteria, tests (if requested), implementation tasks
-     - Clear [Story] labels (US1, US2, US3...) for each task
-     - [P] markers for parallelizable tasks within each story
-     - Checkpoint markers after each story phase
-   - Final Phase: Polish & cross-cutting concerns
-   - Numbered tasks (T001, T002...) in execution order
-   - Clear file paths for each task
-   - Dependencies section showing story completion order
-   - Parallel execution examples per story
-   - Implementation strategy section (MVP first, incremental delivery)
+4. **生成 tasks.md**：使用 `.specify/templates/tasks-template.md` 作為結構，填入：
+   - 來自 plan.md 的正確功能名稱
+   - 階段 1：設定任務（項目初始化）
+   - 階段 2：基礎任務（所有使用者故事的阻塞性先決條件）
+   - 階段 3+：每個使用者故事一個階段（按 spec.md 的優先順序）
+     - 每個階段包括：故事目標、獨立測試標準、測試（如果要求）、實作任務
+     - 每個任務的清晰 [故事] 標籤（US1、US2、US3...）
+     - 每個故事內可並行化任務的 [P] 標記
+     - 每個故事階段後的檢查點標記
+   - 最終階段：精煉與橫切關注點
+   - 執行順序的編號任務（T001、T002...）
+   - 每個任務的清晰文件路徑
+   - 顯示故事完成順序的依賴部分
+   - 每個故事的並行執行範例
+   - 實作策略部分（MVP 優先，增量交付）
 
-5. **Report**: Output path to generated tasks.md and summary:
-   - Total task count
-   - Task count per user story
-   - Parallel opportunities identified
-   - Independent test criteria for each story
-   - Suggested MVP scope (typically just User Story 1)
+5. **報告**：輸出生成的 tasks.md 的路徑和摘要：
+   - 總任務數
+   - 每個使用者故事的任務數
+   - 識別的並行機會
+   - 每個故事的獨立測試標準
+   - 建議的 MVP 範圍（通常只是使用者故事 1）
 
-Context for task generation: {ARGS}
+任務生成的上下文：{ARGS}
 
-The tasks.md should be immediately executable - each task must be specific enough that an LLM can complete it without additional context.
+tasks.md 應該立即可執行 - 每個任務必須足夠具體，以便 LLM 可以在沒有額外上下文的情況下完成它。
 
-## Task Generation Rules
+## 任務生成規則
 
-**IMPORTANT**: Tests are optional. Only generate test tasks if the user explicitly requested testing or TDD approach in the feature specification.
+**重要**：測試是可選的。只有在功能規格中明確要求測試或使用者要求 TDD 方法時才生成測試任務。
 
-**CRITICAL**: Tasks MUST be organized by user story to enable independent implementation and testing.
+**關鍵**：任務必須按使用者故事組織，以實現獨立的實作和測試。
 
-1. **From User Stories (spec.md)** - PRIMARY ORGANIZATION:
-   - Each user story (P1, P2, P3...) gets its own phase
-   - Map all related components to their story:
-     - Models needed for that story
-     - Services needed for that story
-     - Endpoints/UI needed for that story
-     - If tests requested: Tests specific to that story
-   - Mark story dependencies (most stories should be independent)
-   
-2. **From Contracts**:
-   - Map each contract/endpoint → to the user story it serves
-   - If tests requested: Each contract → contract test task [P] before implementation in that story's phase
-   
-3. **From Data Model**:
-   - Map each entity → to the user story(ies) that need it
-   - If entity serves multiple stories: Put in earliest story or Setup phase
-   - Relationships → service layer tasks in appropriate story phase
-   
-4. **From Setup/Infrastructure**:
-   - Shared infrastructure → Setup phase (Phase 1)
-   - Foundational/blocking tasks → Foundational phase (Phase 2)
-     - Examples: Database schema setup, authentication framework, core libraries, base configurations
-     - These MUST complete before any user story can be implemented
-   - Story-specific setup → within that story's phase
+1. **來自使用者故事（spec.md）** - 主要組織：
+   - 每個使用者故事（P1、P2、P3...）都有自己的階段
+   - 將所有相關組件映射到它們的故事：
+     - 該故事所需的模型
+     - 該故事所需的服務
+     - 該故事所需的端點/UI
+     - 如果要求測試：該故事特定的測試
+   - 標記故事依賴關係（大多數故事應該是獨立的）
 
-5. **Ordering**:
-   - Phase 1: Setup (project initialization)
-   - Phase 2: Foundational (blocking prerequisites - must complete before user stories)
-   - Phase 3+: User Stories in priority order (P1, P2, P3...)
-     - Within each story: Tests (if requested) → Models → Services → Endpoints → Integration
-   - Final Phase: Polish & Cross-Cutting Concerns
-   - Each user story phase should be a complete, independently testable increment
+2. **來自合約**：
+   - 將每個合約/端點映射到它服務的使用者故事
+   - 如果要求測試：每個合約 → 在該故事階段實作之前的合約測試任務 [P]
+
+3. **來自資料模型**：
+   - 將每個實體映射到需要它的使用者故事
+   - 如果實體服務於多個故事：放在最早的故事或設定階段
+   - 關係 → 適當故事階段的服務層任務
+
+4. **來自設定/基礎設施**：
+   - 共享基礎設施 → 設定階段（階段 1）
+   - 基礎/阻塞性任務 → 基礎階段（階段 2）
+     - 範例：資料庫 schema 設定、身份驗證框架、核心函式庫、基本配置
+     - 這些必須在任何使用者故事可以實作之前完成
+   - 故事特定設定 → 在該故事的階段內
+
+5. **排序**：
+   - 階段 1：設定（項目初始化）
+   - 階段 2：基礎（阻塞性先決條件 - 必須在使用者故事之前完成）
+   - 階段 3+：按優先順序的使用者故事（P1、P2、P3...）
+     - 每個故事內：測試（如果要求）→ 模型 → 服務 → 端點 → 整合
+   - 最終階段：精煉與橫切關注點
+   - 每個使用者故事階段應該是完整的、可獨立測試的增量
 
